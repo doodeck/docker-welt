@@ -1,4 +1,7 @@
-# docker container run --volume $PWD:/src --workdir /src ppc64le/ibmjava:8-sdk javac *.java
-FROM ppc64le/ibmjava:8-sfj
-COPY HelloWorld.class .
+FROM ppc64le/ibmjava:8-sdk as build
+COPY HelloWorld.java .
+RUN javac HelloWorld.java
+
+FROM ppc64le/ibmjava:8-sfj AS run
+COPY --from=build HelloWorld.class .
 CMD java HelloWorld
